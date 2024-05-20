@@ -22,6 +22,7 @@ public class TaskController {
     @Autowired
     TaskService taskService;
 
+    // This API adds new task to the list.
     @PostMapping(value = "add")
     public ResponseEntity<ResponseDto<TaskDTO>> addNewTask(@RequestBody TaskDTO taskDTO) {
         ResponseDto<TaskDTO>response = new ResponseDto<>();
@@ -30,6 +31,7 @@ public class TaskController {
             response.setData(taskService.addTask(taskDTO));
             response.setErrors(null);
         } catch (IllegalArgumentException exception){
+            // If any validation fails add it to responseDTO.
             response.setData(null);
             response.setErrors(List.of(exception.getMessage()));
             status = HttpStatus.BAD_REQUEST;
@@ -37,6 +39,7 @@ public class TaskController {
         return new ResponseEntity<>(response, status);
     }
 
+    // This API mark task as done.
     @PatchMapping(value = "done/{id}")
     public ResponseEntity<ResponseDto<TaskDTO>> markTaskDone(@PathVariable int id, @RequestBody boolean markDone) {
         ResponseDto<TaskDTO>response = new ResponseDto<>();
@@ -45,6 +48,7 @@ public class TaskController {
             response.setData(taskService.markTaskDone(id, markDone));
             response.setErrors(null);
         } catch (Exception exception){
+            // If any validation fails add it to responseDTO.
             response.setData(null);
             response.setErrors(List.of(exception.getMessage()));
             status = HttpStatus.BAD_REQUEST;
@@ -53,6 +57,7 @@ public class TaskController {
         return new ResponseEntity<>(response, status);
     }
 
+    // API to mark task cancelled.
     @PatchMapping(value = "cancel/{id}")
     public ResponseEntity<ResponseDto<TaskDTO>> markTaskCancelled(@PathVariable int id, @RequestBody boolean markCancelled) {
         ResponseDto<TaskDTO>response = new ResponseDto<>();
@@ -68,6 +73,7 @@ public class TaskController {
         return new ResponseEntity<>(response, status);
     }
 
+    // API to edit/update the task.
     @PutMapping(value = "update/{id}")
     public ResponseEntity<ResponseDto<TaskDTO>> updateTaskDetails(@PathVariable int id, @RequestBody TaskDTO taskDTO){
         ResponseDto<TaskDTO>response = new ResponseDto<>();
@@ -84,6 +90,7 @@ public class TaskController {
         return new ResponseEntity<>(response, status);
     }
 
+    // API to get the tasks based on filter and sortBy.
     @GetMapping(value = "get")
     public ResponseEntity<ResponseDto<List<TaskDTO>>> getTasks(@RequestParam(required = false) Priority priority,
                                                                @RequestParam(required = false) String dueDate,
